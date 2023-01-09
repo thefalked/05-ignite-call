@@ -1,6 +1,8 @@
+import { NextApiRequest, NextApiResponse } from 'next'
 import { NextAuthOptions } from 'next-auth'
 import NextAuth from 'next-auth/next'
-import GoogleProvider from 'next-auth/providers/google'
+import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
+import { PrismaAdapter } from '../../../lib/auth/prisma-adapter'
 
 const GOOGLE_LINK = 'https://www.googleapis.com/auth'
 
@@ -12,28 +14,45 @@ const googleScopes = [googleScopeEmail, googleScopeProfile, googleScopeCalendar]
   .join(' ')
   .trim()
 
-export const authOptions: NextAuthOptions = {
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
-      authorization: {
-        params: {
-          scope: googleScopes,
+export function buildNextAuthOptions(
+  req: NextApiRequest,
+  res: NextApiResponse,
+): NextAuthOptions {
+  return {
+    adapter: PrismaAdapter(req, res),
+    providers: [
+      GoogleProvider({
+        clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+        authorization: {
+          params: {
+            scope: googleScopes,
+          },
         },
+        profile(profile: GoogleProfile) {
+          return {
+            id: profile.sub,
+            name: profile.name,
+            username: '',
+            email: profile.email,
+            avatar_url: profile.picture,
+          }
+        },
+      }),
+    ],
+
+    callbacks: {
+      async signIn({ account }) {
+        if (!account?.scope?.includes(googleScopeCalendar)) {
+          return '/register/connect-calendar/?error=permissions'
+        }
+
+        return true
       },
-    }),
-  ],
-
-  callbacks: {
-    async signIn({ account }) {
-      if (!account?.scope?.includes(googleScopeCalendar)) {
-        return '/register/connect-calendar/?error=permissions'
-      }
-
-      return true
     },
-  },
+  }
 }
 
-export default NextAuth(authOptions)
+export default async function auth(req: NextApiRequest, res: NextApiResponse) {
+  return await NextAuth(req, res, buildNextAuthOptions(req, res))
+}
