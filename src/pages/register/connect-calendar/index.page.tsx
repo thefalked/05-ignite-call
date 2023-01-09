@@ -10,7 +10,7 @@ export default function Register() {
 
   const router = useRouter()
 
-  const handleConnectCalendar = () => signIn('google')
+  const handleConnectCalendar = async () => signIn('google')
 
   const hasAuthError = !!router.query.error
   const isSignedIn = session.status === 'authenticated'
