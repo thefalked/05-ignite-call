@@ -32,7 +32,7 @@ export default function Register() {
         <ConnectItem>
           <Text>Google Calendar</Text>
 
-          {!hasAuthError && isSignedIn ? (
+          {isSignedIn ? (
             <Button size="sm" disabled>
               Conectado
               <Check />
@@ -49,7 +49,7 @@ export default function Register() {
           )}
         </ConnectItem>
 
-        {hasAuthError && (
+        {!isSignedIn && hasAuthError && (
           <AuthError>
             Falha ao se conectar ao Google, verifique se você habilitou as
             permissões de acesso ao Google Calendar
