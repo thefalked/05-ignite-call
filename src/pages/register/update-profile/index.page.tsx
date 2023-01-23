@@ -5,7 +5,7 @@ import {
   Heading,
   MultiStep,
   Text,
-  TextArea
+  TextArea,
 } from '@ignite-ui/react'
 import { GetServerSideProps } from 'next'
 import { unstable_getServerSession } from 'next-auth'

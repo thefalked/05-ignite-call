@@ -5,7 +5,7 @@ import {
   Heading,
   MultiStep,
   Text,
-  TextInput
+  TextInput,
 } from '@ignite-ui/react'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
@@ -22,7 +22,7 @@ import {
   IntervalDay,
   IntervalInputs,
   IntervalItem,
-  IntervalsContainer
+  IntervalsContainer,
 } from './styles'
 
 const timeIntervalsFormSchema = z.object({

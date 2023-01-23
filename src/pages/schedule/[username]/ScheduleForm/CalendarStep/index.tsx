@@ -9,7 +9,7 @@ import {
   TimePicker,
   TimePickerHeader,
   TimePickerItem,
-  TimePickerList
+  TimePickerList,
 } from './styles'
 
 interface Availability {
