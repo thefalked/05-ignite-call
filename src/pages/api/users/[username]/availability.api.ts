@@ -73,7 +73,7 @@ export default async function handle(
     if (referenceDate.isSame(new Date(), 'day')) {
       const isTimeInPast = referenceDate.set('hour', time).isBefore(new Date())
 
-      return isTimeInPast
+      return !isTimeInPast
     }
 
     return isTimeBlocked
