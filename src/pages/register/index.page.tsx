@@ -80,7 +80,7 @@ export default function Register() {
           <label>
             <Text size="sm">Nome de usuário</Text>
             <TextInput
-              prefix="ignite.com/"
+              prefix="/schedule/"
               placeholder="seu-usuario"
               {...register('username')}
             />
